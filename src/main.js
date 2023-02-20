@@ -6,6 +6,11 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
+// 引入echarts
+import * as echarts from 'echarts'
+// 设置全局 echarts
+Vue.prototype.$echarts = echarts 
+
 import '@/styles/index.scss' // global css
 
 import App from './App'
