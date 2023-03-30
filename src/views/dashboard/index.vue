@@ -43,7 +43,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getWeiboCommentCount,getBiliReplyCount,getTotalCount } from '@/api/analysis'
+import { getWeiboCommentCount, getBiliReplyCount, getWeiboStatistic, getTwitterCommentCount } from '@/api/analysis'
 
 export default {
   name: 'Dashboard',
@@ -57,9 +57,12 @@ export default {
         minReply: '',
         timeRange: '',
       },
-      countChartCategory: ['总数','乐好喜', '惧', '惊', '哀', '恶', '怒', '未知'],
-      countChartHandledData: [666, 666, 666, 666, 666, 666, 666, 666],
-      countChartUnhandledData: [666],
+      // ['总数','乐好喜', '惧', '惊', '哀', '恶', '怒', '未知']
+      countChartCategory: ['总数'],
+      //  [666, 666, 666, 666, 666, 666, 666, 666]
+      countChartHandledData: [0],
+      // [666]
+      countChartUnhandledData: [0],
 
       distributionChartData: [
         { value: 1, name: 'bilibili' },
@@ -74,23 +77,34 @@ export default {
   },
   methods: {
     getData(){
-      getWeiboCommentCount(this.form).then(response => {
-        this.distributionChartData[1].value = (response.data);
+      
+      Promise.all([
+        getWeiboCommentCount(this.form).then(response => {
+          this.distributionChartData[1].value = (response.data);
+        }),
+        getBiliReplyCount(null).then(response => {
+          this.distributionChartData[0].value = (response.data);
+        }),
+        getTwitterCommentCount(null).then(response => {
+          this.distributionChartData[2].value = (response.data);
+        }),
+        // 以下为各个网站情感分布数量统计
+        getWeiboStatistic(null).then(response => {
+          let handled = 0;
+          let arr = response.data;
+          for (let i = 0, len = arr.length; i < len; i++) {
+            this.countChartCategory.push(arr[i]["sentiment"]);
+            this.countChartHandledData.push(arr[i]["num"]);
+            handled += arr[i]["num"]; 
+          }
+          this.countChartHandledData[0] = handled;
+        })
+      ]).then((result)=>{
         // 要在这里更新，放在外面响应还没到就更新，因此还是没更新数据
+        this.countChartUnhandledData[0] = this.distributionChartData[1].value - this.countChartHandledData[0];
         this.DrawdistributionChart();
-      });
-
-      getBiliReplyCount(null).then(response => {
-        this.distributionChartData[0].value = (response.data);
-        this.DrawdistributionChart();
-      });
-
-      getTotalCount(null).then(response => {
-        this.countChartUnhandledData[0] = (response.data.unhandled);
-        this.countChartHandledData[0] = (response.data.handled);
         this.Draw();
       });
-      
     },
     Draw() {
       // 基于准备好的dom，初始化echarts实例
@@ -99,7 +113,7 @@ export default {
       myChart.setOption({
         // options配置项
           title: {
-            text: '已抓取评论总体情感倾向'
+            text: '微博-已抓取评论情感倾向'
           },
           tooltip: {
             trigger: 'axis',
