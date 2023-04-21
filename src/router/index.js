@@ -54,6 +54,16 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
+  {
+    path: '/btc',
+    component: Layout,
+    children: [{
+      path: '/btc',
+      name: 'btc',
+      component: () => import('@/views/btc/index'),
+      meta: { title: '冰糖橙价格', icon: 'bitcoin' }
+    }]
+  },
 
   // {
   //   path: '/example',
@@ -81,19 +91,25 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/analysis/weibo',
     name: 'Analysis',
-    meta: { title: '评论分析', icon: 'el-icon-s-help' },
+    meta: { title: '情感分析', icon: 'el-icon-s-help' },
     children: [
+      {
+        path: 'twitter',
+        name: 'Twitter',
+        component: () => import('@/views/twitter/index'),
+        meta: { title: 'Twitter', icon: 'twitter' }
+      },
       {
         path: 'weibo',
         name: 'Weibo',
         component: () => import('@/views/weibo/index'),
-        meta: { title: '微博', icon: 'table' }
+        meta: { title: '微博', icon: 'weibo' }
       },
       {
         path: 'bili',
         name: 'Bili',
         component: () => import('@/views/bili/index'),
-        meta: { title: 'Bili', icon: 'tree' }
+        meta: { title: 'Bili', icon: 'bilibili' }
       }
     ]
   },
@@ -176,7 +192,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'https://element.eleme.cn/#/zh-CN/component/layout',
-        meta: { title: 'chrome插件下载', icon: 'link' }
+        meta: { title: 'chrome插件下载', icon: 'chrome' }
       }
     ]
   },

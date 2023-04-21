@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="微博网页地址" required>
+      <el-form-item label="Twitter地址" required>
         <el-input v-model="form.url" />
       </el-form-item>
 
@@ -57,6 +57,15 @@
       </el-form-item>
     </el-form>
 
+    <el-row>
+      <el-col :span="16" :offset="0">
+        <el-card :body-style="{ padding: '14px' }">
+          <div class="">
+            <div id="sentimentPieChart" :style="{width: '100%', height: '400px'}"></div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
 
     <el-row>
       <el-col :span="16" :offset="0">
@@ -67,25 +76,14 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="8" :offset="0">
-        <el-card :body-style="{ padding: '14px' }">
-          <div class="">
-            <div id="sentimentPieChart" :style="{width: '100%', height: '650px'}"></div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>    
-
-
-    <!-- <el-row>
-      <el-col :span="8" :offset="0">
+        <el-col :span="8" :offset="0">
         <el-card :body-style="{ padding: '14px' }">
           <div class="foreignMap">
             <div id="" :style="{height: '650px', width: '400px'}"></div>
           </div>
         </el-card>
       </el-col>
-    </el-row> -->
+    </el-row>    
   </div>
 
 

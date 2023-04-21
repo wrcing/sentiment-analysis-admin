@@ -90,3 +90,32 @@ export function getTwitterCommentCount(data) {
         params: data
     })
 }
+export function getTwitterAnalysisStatistic(data) {
+    // 每小时一个数据，不需要，后端已经优化了
+    // data["timePoint"].setMinutes(0);
+    // data["timePoint"].setSeconds(0);
+    // data["timePoint"].setMilliseconds(0);
+
+    return request({
+        url: '/twitter/analysis/statistic',
+        method: 'get',
+        params: {
+            keys: data["keys"],
+            timePoint: Date.parse(data["timePoint"]).toString(), 
+            preSeconds: data["preSeconds"],
+        }
+    })
+}
+// =================== btc price =========================
+export function getBTCPrices(data) {
+    return request({
+        url: '/btc/prices',
+        method: 'get',
+        params: {
+            startTime: Date.parse(data.startTime).toString(),
+            endTime: Date.parse(data.endTime).toString(),
+            type: data.type, 
+            sepSeconds: data.sepSeconds,
+        }
+    })
+}
